@@ -19,7 +19,6 @@
       --font-d:   'Cormorant Garamond', Georgia, serif;
       --font-b:   'Jost', system-ui, sans-serif;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
@@ -33,7 +32,7 @@
       overflow-x: hidden;
     }
 
-    /* Scroll reveal */
+    /* Reveal */
     .reveal {
       opacity: 0;
       transform: translateY(32px);
@@ -44,7 +43,7 @@
       .reveal { opacity: 1; transform: none; transition: none; }
     }
 
-    /* Page load animations */
+    /* Load animations */
     .load-up {
       opacity: 0;
       transform: translateY(18px);
@@ -54,10 +53,10 @@
       opacity: 0;
       animation: fadeIn 1.1s var(--ease) forwards;
     }
-    @keyframes fadeUp  { to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeIn  { to { opacity: 1; } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
 
-    /* === HERO === */
+    /* HERO */
     #hero {
       display: flex;
       flex-direction: column;
@@ -133,7 +132,7 @@
       color: rgba(255,255,255,0.6);
     }
 
-    /* === NAMES === */
+    /* NAMES */
     #names {
       text-align: center;
       padding: 100px 40px 80px;
@@ -185,7 +184,7 @@
       white-space: nowrap;
     }
 
-    /* === DETAILS === */
+    /* DETAILS */
     #details {
       background: var(--surface);
       padding: 100px 40px;
@@ -241,7 +240,7 @@
       flex-shrink: 0;
     }
 
-    /* === RSVP === */
+    /* RSVP */
     #rsvp {
       padding: 100px 40px;
       max-width: 860px;
@@ -314,19 +313,31 @@
       transition: background 0.2s; align-self: start;
     }
     .btn-submit:hover { background: #333; }
-    #rsvp-confirm { display: none; text-align: center; padding: 64px 0; }
-    .confirm__symbol {
-      font-family: var(--font-d); font-size: 48px;
-      font-style: italic; color: var(--ink-soft);
+    .btn-submit:disabled {
+      background: #999; cursor: not-allowed;
+    }
+
+    /* Статусы формы */
+    #rsvp-status {
+      display: none;
+      margin-top: 32px;
+      text-align: center;
+      padding: 48px 0;
+    }
+    .status__symbol {
+      font-family: var(--font-d);
+      font-size: 48px; font-style: italic;
+      color: var(--ink-soft);
       display: block; margin-bottom: 20px;
     }
-    .confirm__heading {
+    .status__heading {
       font-family: var(--font-d); font-style: italic;
       font-size: 40px; font-weight: 600; margin-bottom: 12px;
     }
-    .confirm__text { font-size: 14px; color: var(--ink-soft); }
+    .status__text { font-size: 14px; color: var(--ink-soft); }
+    .status--error .status__heading { color: #c00; }
 
-    /* === ACTIONS === */
+    /* ACTIONS */
     #actions { background: var(--ink); padding: 80px 40px; }
     .actions__inner {
       max-width: 860px; margin: 0 auto;
@@ -345,7 +356,30 @@
     .btn-action:hover { border-color: #fff; background: rgba(255,255,255,0.07); }
     .btn-action svg { width: 15px; height: 15px; flex-shrink: 0; }
 
-    /* === FOOTER === */
+    /* CONTACTS */
+    #contacts {
+      padding: 80px 40px;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .contacts__label {
+      font-size: 9px; font-weight: 400;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--ink-soft); margin-bottom: 16px;
+    }
+    .contacts__phone {
+      font-family: var(--font-d);
+      font-size: 32px; font-weight: 600; font-style: italic;
+      color: var(--ink); text-decoration: none;
+      display: block; margin-bottom: 8px;
+    }
+    .contacts__phone:hover { opacity: 0.7; }
+    .contacts__hint {
+      font-size: 12px; color: var(--ink-soft); font-weight: 300;
+    }
+
+    /* FOOTER */
     footer {
       text-align: center; padding: 60px 40px;
       border-top: 1px solid var(--border);
@@ -359,7 +393,7 @@
       letter-spacing: 0.26em; text-transform: uppercase; color: var(--ink-soft);
     }
 
-    /* === MOBILE === */
+    /* MOBILE */
     @media (max-width: 480px) {
       #hero { padding: 72px 20px 56px; }
       .hero__photos { gap: 6px; }
@@ -372,6 +406,7 @@
       #actions { padding: 56px 20px; }
       .actions__inner { flex-direction: column; align-items: stretch; }
       .btn-action { justify-content: center; }
+      #contacts { padding: 60px 20px; }
       footer { padding: 48px 20px; }
     }
   </style>
@@ -455,15 +490,16 @@
     <p class="rsvp__deadline">
       Просим подтвердить присутствие до <strong>1 августа 2026</strong>
     </p>
+
     <div id="rsvp-form-wrapper">
-      <div class="rsvp-form">
+      <div class="rsvp-form" id="rsvp-form">
         <div class="form-group">
           <label for="guest-name">Ваше имя</label>
-          <input type="text" id="guest-name" placeholder="Имя Фамилия" autocomplete="name" />
+          <input type="text" id="guest-name" name="name" placeholder="Имя Фамилия" autocomplete="name" required />
         </div>
         <div class="form-group">
           <label for="guest-count">Количество гостей</label>
-          <select id="guest-count">
+          <select id="guest-count" name="guests">
             <option value="1">1 — только я</option>
             <option value="2">2 человека</option>
             <option value="3">3 человека</option>
@@ -475,30 +511,31 @@
           <label>Ваш ответ</label>
           <div class="radio-group">
             <label class="radio-option">
-              <input type="radio" name="attendance" value="yes" checked />
+              <input type="radio" name="attendance" value="Буду" checked />
               С удовольствием приду
             </label>
             <label class="radio-option">
-              <input type="radio" name="attendance" value="no" />
+              <input type="radio" name="attendance" value="Не смогу" />
               К сожалению, не смогу
             </label>
           </div>
         </div>
-        <button class="btn-submit" onclick="submitRSVP()">Отправить</button>
+        <button class="btn-submit" id="rsvp-btn" onclick="submitRSVP(event)">Отправить</button>
       </div>
     </div>
-    <div id="rsvp-confirm">
-      <span class="confirm__symbol">✦</span>
-      <p class="confirm__heading">Спасибо!</p>
-      <p class="confirm__text">Ваш ответ получен. Ждём вас 14 августа.</p>
+
+    <!-- Статус -->
+    <div id="rsvp-status">
+      <span class="status__symbol">✦</span>
+      <p class="status__heading" id="status-heading"></p>
+      <p class="status__text" id="status-text"></p>
     </div>
   </section>
 
   <!-- ACTIONS -->
   <section id="actions" class="reveal">
     <div class="actions__inner">
-      <a href="https://2gis.kg/bishkek/search/%D1%80%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%20EGO%20%D0%90%D0%B0%D0%BB%D1%8B%20%D0%A2%D0%BE%D0%BA%D0%BE%D0%BC%D0%B1%D0%B0%D0%B5%D0%B2%D0%B0%2043"
-         target="_blank" rel="noopener noreferrer" class="btn-action">
+      <a href="https://2gis.kg/bishkek/firm/70000001058831394" target="_blank" rel="noopener noreferrer" class="btn-action">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
           <circle cx="12" cy="9" r="2.5"/>
@@ -514,6 +551,13 @@
         Наш Instagram
       </a>
     </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section id="contacts" class="reveal">
+    <p class="contacts__label">По всем вопросам</p>
+    <a href="tel:+996700000665" class="contacts__phone">+996 700 000 665</a>
+    <p class="contacts__hint">Напишите или позвоните</p>
   </section>
 
   <!-- FOOTER -->
@@ -532,8 +576,10 @@
     );
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // RSVP submit
-    function submitRSVP() {
+    // RSVP через Formspree
+    async function submitRSVP(e) {
+      e.preventDefault();
+
       const nameEl = document.getElementById('guest-name');
       const name = nameEl.value.trim();
       if (!name) {
@@ -542,30 +588,49 @@
         setTimeout(() => nameEl.style.borderColor = '', 1500);
         return;
       }
+
+      const btn = document.getElementById('rsvp-btn');
+      btn.disabled = true;
+      btn.textContent = 'Отправляем...';
+
       const data = {
         name,
-        guestCount: document.getElementById('guest-count').value,
-        attendance: document.querySelector('input[name="attendance"]:checked')?.value || 'yes',
-        submittedAt: new Date().toISOString()
+        guests: document.getElementById('guest-count').value,
+        attendance: document.querySelector('input[name="attendance"]:checked')?.value || 'Буду'
       };
-      try { localStorage.setItem('rsvp_wedding_2026', JSON.stringify(data)); } catch(e) {}
-      document.getElementById('rsvp-form-wrapper').style.display = 'none';
-      document.querySelector('.rsvp__deadline').style.display = 'none';
-      const c = document.getElementById('rsvp-confirm');
-      c.style.display = 'block';
-      setTimeout(() => c.classList.add('visible'), 10);
-    }
 
-    // Restore state
-    (function() {
       try {
-        if (!localStorage.getItem('rsvp_wedding_2026')) return;
-        document.getElementById('rsvp-form-wrapper').style.display = 'none';
-        document.querySelector('.rsvp__deadline').style.display = 'none';
-        const c = document.getElementById('rsvp-confirm');
-        c.style.display = 'block'; c.classList.add('visible');
-      } catch(e) {}
-    })();
+        const res = await fetch('https://formspree.io/f/xjgqjkjj', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const wrapper = document.getElementById('rsvp-form-wrapper');
+        const deadline = document.querySelector('.rsvp__deadline');
+        const status = document.getElementById('rsvp-status');
+
+        if (res.ok) {
+          wrapper.style.display = 'none';
+          deadline.style.display = 'none';
+          document.getElementById('status-heading').textContent = 'Спасибо!';
+          document.getElementById('status-text').textContent = 'Ваш ответ получен. Ждём вас 14 августа.';
+          status.style.display = 'block';
+          setTimeout(() => status.classList.add('visible'), 10);
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Отправить';
+          document.getElementById('status-heading').textContent = 'Ошибка';
+          document.getElementById('status-text').textContent = 'Попробуйте ещё раз или напишите нам напрямую.';
+          status.classList.add('status--error');
+          status.style.display = 'block';
+        }
+      } catch(err) {
+        btn.disabled = false;
+        btn.textContent = 'Отправить';
+        alert('Ошибка соединения. Проверьте интернет и попробуйте снова.');
+      }
+    }
   </script>
 
 </body>
